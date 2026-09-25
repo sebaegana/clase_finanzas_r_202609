@@ -1,0 +1,20 @@
+---
+title: "Ejemplo de Distribución Triangular"
+author: "Sebastián Egaña"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Distribución triangular
+
+Una distribución triangular se define utilizando tres parámetros:
+
+- `min`: valor mínimo posible.
+- `mode`: valor más probable.
+- `max`: valor máximo posible.
+
+En este ejemplo utilizaremos:
+
+- Mínimo = 80
+- Más probable = 100
+- Máximo = 150

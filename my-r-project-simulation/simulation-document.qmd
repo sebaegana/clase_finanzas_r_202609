@@ -1,0 +1,108 @@
+---
+title: "Reporte Simulación de Montecarlos: Aplicaciones a evaluación de proyectos"
+format: html
+---
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(ggplot2)
+library(dplyr)
+library(triangle)
+```
+
+Se tienen simulaciones de Montecarlo para tres escenarios distintos:
+
+- **Escenario A**: Precio de $12 por unidad, con demanda esperada de 110 unidades (probabilidad de ocurrencia: 25%)
+- **Escenario B**: Precio de $13 por unidad, con demanda esperada de 100 unidades (probabilidad de ocurrencia: 50%)
+- **Escenario C**: Precio de $16 por unidad, con demanda esperada de 80 unidades (probabilidad de ocurrencia: 25%)
+
+Estos escenarios representan diferentes condiciones de mercado que podrían afectar el desempeño del proyecto, considerando tanto cambios en el precio de venta como variaciones en la cantidad demandada.
+
+Se debe primero simular las distintas utilidades de cada escenario. Para ello se realiza una simulación de Montecarlo con 10,000 repeticiones, donde en cada iteración:
+
+1. Se selecciona aleatoriamente uno de los tres escenarios (A, B o C) según sus probabilidades de ocurrencia
+2. Se asignan el precio y cantidad correspondientes al escenario seleccionado
+3. Se genera el costo variable unitario mediante una distribución triangular con parámetros (9, 13, 11)
+4. Se calcula la utilidad como: **Utilidad = (Precio - Costo Variable Unitario) × Cantidad - Costo Fijo**
+
+El costo fijo es constante en $150 para todos los escenarios. Esta metodología permite obtener una distribución empírica de las posibles utilidades del proyecto bajo diferentes condiciones de mercado e incertidumbre en costos.
+
+```{r}
+#| echo: false
+#| warning: false
+set.seed(1234567)
+
+reps <- 10000
+
+utilidad <- matrix(NA, nrow = reps, ncol = 1)
+for (i in 1:reps) {
+  x <- sample(
+    c("A", "B", "C"),
+    1,
+    replace = TRUE,
+    prob = c(1 / 4, 1 / 2, 1 / 4)
+  )
+  if (x == "A") {
+    precio <- 12
+    cantidad <- 110
+  } else if (x == "B") {
+    precio <- 13
+    cantidad <- 100
+  } else {
+    precio <- 16
+    cantidad <- 80
+  }
+  costo_variable_unitario <- rtriangle(1, 9, 13, 11)
+  costo_fijo <- 150
+  utilidad[i] <- (precio - costo_variable_unitario) * cantidad - costo_fijo
+}
+
+utilidad <- data.frame(utilidad) # tibble
+
+```
+
+Dejamos el print de ejemplo de las primeras simulaciones
+
+```{r}
+#| echo: false
+#| warning: false
+head(utilidad)
+```
+
+# Resultados
+
+## Distribución de resultados de la simulación
+
+```{r}
+#| echo: false
+#| warning: false
+ggplot(utilidad) +
+  geom_histogram(
+    aes(x = utilidad, y = after_stat(density)),
+    col = "black",
+    bins = 35
+  ) +
+  labs(x = "Utilidad", y = "Densidad") +
+  theme(
+    panel.background = element_blank(),
+    axis.line = element_line()
+  )
+```
+
+## Probabilidad de utilidades menores que 0
+
+```{r}
+#| echo: false
+#| warning: false
+paste0("Prob(utilidad<0) = ", round(mean(utilidad$utilidad<0),2))
+```
+
+## Valor esperado de la utilidad
+
+```{r}
+#| echo: false
+#| warning: false
+paste0("Valor esperado utilidad = ", round(mean(utilidad$utilidad),2))
+```
