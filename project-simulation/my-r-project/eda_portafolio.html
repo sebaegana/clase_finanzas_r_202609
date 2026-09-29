@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDA Portafolio de 5 Activos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 1.3em;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .tabla-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .gallery-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .gallery-item h3 {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            margin: 0;
+            font-size: 1em;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            background: white;
+            padding: 10px;
+        }
+
+        .gallery-item.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .assets-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .assets-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .assets-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 3px;
+        }
+
+        .matrix-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .matrix-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .matrix-item h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .correlation-grid {
+            display: inline-grid;
+            grid-template-columns: repeat(5, 100px);
+            gap: 2px;
+            margin: 10px 0;
+        }
+
+        .corr-cell {
+            padding: 10px;
+            text-align: center;
+            font-size: 0.85em;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .corr-header {
+            background: #667eea;
+            color: white;
+        }
+
+        .corr-positive {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+        }
+
+        .corr-negative {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .insights {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .insights h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .insights ul {
+            margin-left: 20px;
+            color: #333;
+        }
+
+        .insights li {
+            margin: 8px 0;
+        }
+
+        footer {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-button:hover {
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .info-box {
+                grid-template-columns: 1fr;
+            }
+
+            .correlation-grid {
+                grid-template-columns: repeat(5, 80px);
+            }
+
+            .corr-cell {
+                font-size: 0.75em;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>📊 Análisis Exploratorio de Datos</h1>
+            <p class="subtitle">Portafolio de 5 Activos Financieros</p>
+
+            <div class="info-box">
+                <div class="info-item">
+                    <div class="info-label">Período</div>
+                    <div class="info-value">Ene 2013 - Dic 2021</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Observaciones</div>
+                    <div class="info-value">108 meses</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Activos</div>
+                    <div class="info-value">5 fondos indexados</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Frecuencia</div>
+                    <div class="info-value">Retornos mensuales</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Estadística Descriptiva -->
+        <section class="section">
+            <h2>📈 Estadística Descriptiva</h2>
+
+            <div class="tabla-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Activo</th>
+                            <th>Media (%)</th>
+                            <th>Desv. Estándar (%)</th>
+                            <th>Mínimo (%)</th>
+                            <th>Q1 (%)</th>
+                            <th>Mediana (%)</th>
+                            <th>Q3 (%)</th>
+                            <th>Máximo (%)</th>
+                            <th>Obs. Faltantes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SPY</strong></td>
+                            <td>1.27</td>
+                            <td>3.85</td>
+                            <td>-13.34</td>
+                            <td>-0.13</td>
+                            <td>1.82</td>
+                            <td>3.56</td>
+                            <td>11.95</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EFA</strong></td>
+                            <td>0.55</td>
+                            <td>3.94</td>
+                            <td>-15.21</td>
+                            <td>-1.97</td>
+                            <td>0.94</td>
+                            <td>3.12</td>
+                            <td>13.34</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IJS</strong></td>
+                            <td>1.00</td>
+                            <td>5.81</td>
+                            <td>-29.79</td>
+                            <td>-1.95</td>
+                            <td>1.35</td>
+                            <td>4.06</td>
+                            <td>17.57</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EEM</strong></td>
+                            <td>0.27</td>
+                            <td>4.70</td>
+                            <td>-17.16</td>
+                            <td>-2.89</td>
+                            <td>0.83</td>
+                            <td>3.15</td>
+                            <td>12.19</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AGG</strong></td>
+                            <td>0.22</td>
+                            <td>0.92</td>
+                            <td>-2.60</td>
+                            <td>-0.33</td>
+                            <td>0.16</td>
+                            <td>0.83</td>
+                            <td>2.75</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="insights">
+                <h3>💡 Hallazgos Clave</h3>
+                <ul>
+                    <li><strong>Mejor rendimiento:</strong> SPY con media de 1.27% mensual</li>
+                    <li><strong>Menor volatilidad:</strong> AGG (bonos) con desv. estándar de 0.92%</li>
+                    <li><strong>Mayor volatilidad:</strong> IJS con desv. estándar de 5.81%</li>
+                    <li><strong>Datos completos:</strong> Sin valores faltantes en ningún activo</li>
+                    <li><strong>Asimetría:</strong> SPY y EFA tienen retornos máximos similares a IJS</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Visualizaciones Gráficas -->
+        <section class="section">
+            <h2>📊 Análisis de Distribuciones y Series Temporales</h2>
+
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab(event, 'histogramas')">Histogramas</button>
+                <button class="tab-button" onclick="switchTab(event, 'series')">Series Temporales</button>
+                <button class="tab-button" onclick="switchTab(event, 'acumulados')">Retornos Acumulados</button>
+                <button class="tab-button" onclick="switchTab(event, 'dispersion')">Matriz de Dispersión</button>
+            </div>
+
+            <div id="histogramas" class="tab-content active">
+                <h3>Distribución de Retornos Mensuales</h3>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <h3>Histogramas por Activo</h3>
+                        <img src="output/histogramas_retornos.png" alt="Histogramas de retornos">
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #666;">Los histogramas muestran la distribución de frecuencias de los retornos mensuales. Se observan distribuciones aproximadamente normales con algunas colas largas, particularmente en IJS y EEM.</p>
+            </div>
+
+            <div id="series" class="tab-content">
+                <h3>Evolución Temporal de Retornos</h3>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <h3>Series Individuales</h3>
+                        <img src="output/series_temporales.png" alt="Series temporales">
+                    </div>
+                    <div class="gallery-item">
+                        <h3>Series Combinadas</h3>
+                        <img src="output/series_temporales_combinadas.png" alt="Series combinadas">
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #666;">Las series temporales revelan sincronización entre activos, especialmente durante períodos de volatilidad de mercado. AGG (bonos) muestra comportamiento diferenciado.</p>
+            </div>
+
+            <div id="acumulados" class="tab-content">
+                <h3>Retornos Acumulados Desde Enero 2013</h3>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <h3>Crecimiento de $1 Invertido</h3>
+                        <img src="output/retornos_acumulados.png" alt="Retornos acumulados">
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #666;">Gráfico que muestra cómo $1 invertido al inicio ha evolucionado hasta diciembre 2021. SPY y IJS muestran mejor desempeño acumulado.</p>
+            </div>
+
+            <div id="dispersion" class="tab-content">
+                <h3>Relaciones Entre Pares de Activos</h3>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <h3>Scatter Plots</h3>
+                        <img src="output/matriz_dispersion.png" alt="Matriz de dispersión">
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #666;">La matriz de dispersión permite visualizar las relaciones bivariadas entre todos los pares de activos, confirmando las correlaciones observadas.</p>
+            </div>
+        </section>
+
+        <!-- Análisis de Correlación y Covarianza -->
+        <section class="section">
+            <h2>🔗 Análisis de Correlación y Covarianza</h2>
+
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab(event, 'corr-tabla')">Matriz de Correlación</button>
+                <button class="tab-button" onclick="switchTab(event, 'corr-visual')">Visualización</button>
+                <button class="tab-button" onclick="switchTab(event, 'cov-tabla')">Matriz de Covarianza</button>
+                <button class="tab-button" onclick="switchTab(event, 'cov-visual')">Visualización</button>
+            </div>
+
+            <div id="corr-tabla" class="tab-content active">
+                <h3>Coeficientes de Correlación de Pearson</h3>
+                <div class="correlation-grid">
+                    <div class="corr-cell corr-header"></div>
+                    <div class="corr-cell corr-header">SPY</div>
+                    <div class="corr-cell corr-header">EFA</div>
+                    <div class="corr-cell corr-header">IJS</div>
+                    <div class="corr-cell corr-header">EEM</div>
+                    <div class="corr-cell corr-header">AGG</div>
+
+                    <div class="corr-cell corr-header">SPY</div>
+                    <div class="corr-cell">1.000</div>
+                    <div class="corr-cell corr-positive">0.857</div>
+                    <div class="corr-cell corr-positive">0.831</div>
+                    <div class="corr-cell corr-positive">0.691</div>
+                    <div class="corr-cell">-0.004</div>
+
+                    <div class="corr-cell corr-header">EFA</div>
+                    <div class="corr-cell corr-positive">0.857</div>
+                    <div class="corr-cell">1.000</div>
+                    <div class="corr-cell corr-positive">0.743</div>
+                    <div class="corr-cell corr-positive">0.810</div>
+                    <div class="corr-cell">0.058</div>
+
+                    <div class="corr-cell corr-header">IJS</div>
+                    <div class="corr-cell corr-positive">0.831</div>
+                    <div class="corr-cell corr-positive">0.743</div>
+                    <div class="corr-cell">1.000</div>
+                    <div class="corr-cell corr-positive">0.642</div>
+                    <div class="corr-cell corr-negative">-0.168</div>
+
+                    <div class="corr-cell corr-header">EEM</div>
+                    <div class="corr-cell corr-positive">0.691</div>
+                    <div class="corr-cell corr-positive">0.810</div>
+                    <div class="corr-cell corr-positive">0.642</div>
+                    <div class="corr-cell">1.000</div>
+                    <div class="corr-cell">0.148</div>
+
+                    <div class="corr-cell corr-header">AGG</div>
+                    <div class="corr-cell">-0.004</div>
+                    <div class="corr-cell">0.058</div>
+                    <div class="corr-cell corr-negative">-0.168</div>
+                    <div class="corr-cell">0.148</div>
+                    <div class="corr-cell">1.000</div>
+                </div>
+
+                <div class="insights" style="margin-top: 20px;">
+                    <h3>💡 Interpretación</h3>
+                    <ul>
+                        <li><strong>Correlaciones altas (>0.8):</strong> SPY-EFA (0.857) y SPY-IJS (0.831) - movimientos muy sincronizados</li>
+                        <li><strong>Diversificación:</strong> AGG (bonos) tiene correlación casi nula con acciones, excelente diversificador</li>
+                        <li><strong>Correlación negativa:</strong> IJS y AGG (-0.168) ofrecen cierta protección mutua</li>
+                        <li><strong>Recomendación:</strong> AGG es vital para reducir riesgo sistemático del portafolio</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="corr-visual" class="tab-content">
+                <h3>Mapa de Calor - Correlación</h3>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <h3>Heatmap de Correlación</h3>
+                        <img src="output/matriz_correlacion.png" alt="Matriz de correlación">
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #666;">El mapa de calor ordena los activos por similitud mediante clustering jerárquico, facilitando la identificación de grupos correlacionados.</p>
+            </div>
+
+            <div id="cov-tabla" class="tab-content">
+                <h3>Matriz de Covarianza (Riesgo Conjunto)</h3>
+                <div class="tabla-wrapper">
+                    <table style="font-size: 0.85em;">
+                        <thead>
+                            <tr>
+                                <th>Activo</th>
+                                <th>SPY</th>
+                                <th>EFA</th>
+                                <th>IJS</th>
+                                <th>EEM</th>
+                                <th>AGG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>SPY</strong></td>
+                                <td>0.001479</td>
+                                <td>0.001300</td>
+                                <td>0.001855</td>
+                                <td>0.001249</td>
+                                <td>0.000000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>EFA</strong></td>
+                                <td>0.001300</td>
+                                <td>0.001555</td>
+                                <td>0.001700</td>
+                                <td>0.001500</td>
+                                <td>0.000000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>IJS</strong></td>
+                                <td>0.001855</td>
+                                <td>0.001700</td>
+                                <td>0.003370</td>
+                                <td>0.001750</td>
+                                <td>-0.000089</td>
+                            </tr>
+                            <tr>
+                                <td><strong>EEM</strong></td>
+                                <td>0.001249</td>
+                                <td>0.001500</td>
+                                <td>0.001750</td>
+                                <td>0.002205</td>
+                                <td>0.000064</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AGG</strong></td>
+                                <td>0.000000</td>
+                                <td>0.000000</td>
+                                <td>-0.000089</td>
+                                <td>0.000064</td>
+                                <td>0.000084</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 15px; color: #666;">La covarianza mide cómo varían conjuntamente dos activos. Valores altos indican movimientos sincronizados.</p>
+            </div>
+
+            <div id="cov-visual" class="tab-content">
+                <h3>Mapa de Calor - Covarianza</h3>
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <h3>Heatmap de Covarianza</h3>
+                        <img src="output/matriz_covarianza.png" alt="Matriz de covarianza">
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #666;">Visualiza la magnitud de la covarianza entre pares de activos. IJS muestra covarianzas más altas debido a su mayor volatilidad.</p>
+            </div>
+        </section>
+
+        <!-- Información de Activos -->
+        <section class="section">
+            <h2>🏢 Descripción de Activos</h2>
+
+            <div class="assets-item">
+                <div class="assets-label">SPY - SPDR S&P 500 ETF Trust</div>
+                <p style="margin: 8px 0; font-size: 0.95em;">Fondo indexado que replica el índice S&P 500 (500 grandes empresas estadounidenses). Principal referente del mercado accionario US.</p>
+                <div class="assets-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Retorno Medio</div>
+                        <div class="stat-value">1.27%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Volatilidad</div>
+                        <div class="stat-value">3.85%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Sharpe (12mo)</div>
+                        <div class="stat-value">0.33</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assets-item">
+                <div class="assets-label">EFA - iShares MSCI EAFE ETF</div>
+                <p style="margin: 8px 0; font-size: 0.95em;">Índice de mercados desarrollados fuera de USA (Europa, Japón, Australia). Diversificación geográfica.</p>
+                <div class="assets-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Retorno Medio</div>
+                        <div class="stat-value">0.55%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Volatilidad</div>
+                        <div class="stat-value">3.94%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Sharpe (12mo)</div>
+                        <div class="stat-value">0.14</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assets-item">
+                <div class="assets-label">IJS - iShares Core S&P Small-Cap ETF</div>
+                <p style="margin: 8px 0; font-size: 0.95em;">Empresas pequeñas estadounidenses. Mayor volatilidad pero potencial de retornos más altos.</p>
+                <div class="assets-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Retorno Medio</div>
+                        <div class="stat-value">1.00%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Volatilidad</div>
+                        <div class="stat-value">5.81%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Sharpe (12mo)</div>
+                        <div class="stat-value">0.17</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assets-item">
+                <div class="assets-label">EEM - iShares MSCI Emerging Markets ETF</div>
+                <p style="margin: 8px 0; font-size: 0.95em;">Mercados emergentes (China, India, Brasil). Mayor riesgo pero oportunidades de crecimiento.</p>
+                <div class="assets-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Retorno Medio</div>
+                        <div class="stat-value">0.27%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Volatilidad</div>
+                        <div class="stat-value">4.70%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Sharpe (12mo)</div>
+                        <div class="stat-value">0.06</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="assets-item">
+                <div class="assets-label">AGG - iShares Core U.S. Aggregate Bond ETF</div>
+                <p style="margin: 8px 0; font-size: 0.95em;">Bonos de inversión de USA. Activo defensivo con baja correlación a acciones.</p>
+                <div class="assets-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">Retorno Medio</div>
+                        <div class="stat-value">0.22%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Volatilidad</div>
+                        <div class="stat-value">0.92%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Sharpe (12mo)</div>
+                        <div class="stat-value">0.24</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusiones -->
+        <section class="section">
+            <h2>📋 Conclusiones y Recomendaciones</h2>
+
+            <div class="insights">
+                <h3>✓ Hallazgos Principales</h3>
+                <ul>
+                    <li>El portafolio exhibe alta correlación entre fondos de acciones (>0.64), indicando riesgo sistemático significativo</li>
+                    <li>AGG es el mejor diversificador con correlación casi nula (-0.004 con SPY)</li>
+                    <li>SPY es el activo con mejor relación riesgo-retorno en el período observado</li>
+                    <li>IJS, aunque volátil, ofrece diversificación por tamaño de empresa</li>
+                    <li>No hay valores faltantes en los datos; la calidad es excelente</li>
+                </ul>
+            </div>
+
+            <div class="insights" style="background: #fff3cd; border-left-color: #ffc107;">
+                <h3>⚠️ Consideraciones de Riesgo</h3>
+                <ul>
+                    <li>Mayor exposición a mercado estadounidense; considerar aumentar EFA para diversificación global</li>
+                    <li>EEM mostró el rendimiento más bajo; evaluar si es apropiado para los objetivos</li>
+                    <li>En mercados bajistas, diversificación limitada; AGG proporciona protección pero su peso es crítico</li>
+                    <li>Retornos correlacionados sugieren que el portafolio no está completamente diversificado</li>
+                </ul>
+            </div>
+
+            <div class="insights" style="background: #d4edda; border-left-color: #28a745;">
+                <h3>✓ Recomendaciones</h3>
+                <ul>
+                    <li>Aumentar proporción de AGG para mayor estabilidad</li>
+                    <li>Considerar agregar activos no correlacionados (real estate, commodities, oro)</li>
+                    <li>Monitorear relaciones de correlación trimestralmente; pueden cambiar en ciclos económicos</li>
+                    <li>Usar matriz de covarianza para optimización media-varianza del portafolio</li>
+                    <li>Implementar rebalanceo periódico para mantener asignación de objetivos</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Análisis generado automáticamente con R | Datos: 2013-2021 | EDA Completo</p>
+            <p style="font-size: 0.9em; margin-top: 10px; color: #999;">
+                Este análisis es solo informativo. Consulta a un asesor financiero antes de tomar decisiones de inversión.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            // Ocultar todos los tabs
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Desactivar todos los botones
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Mostrar tab actual y activar botón
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
