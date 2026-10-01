@@ -15,7 +15,6 @@ proyecto-simulation/
 ├── my-r-project/
 │   ├── README.md                              # Este archivo
 │   ├── project-simulation-part01-comentado.R  # Análisis principal (recomendado)
-│   ├── project-simulation-part03.R            # Visualizaciones adicionales
 │   ├── distribuciones_escenarios.png          # Gráfico de histogramas
 │   ├── data/
 │   │   └── portafolio_retornos.csv            # Datos de 5 activos (2012-2021)
