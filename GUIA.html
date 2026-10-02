@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía del Repositorio: Finanzas en R</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Roboto:wght@400;700&display=swap">
+    <style>
+        :root {
+            --primary: #1e3a5f;
+            --accent: #e74c3c;
+            --text: #2c3e50;
+            --light-bg: #f8f9fa;
+            --border: #d1d5db;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --primary: #3d5a80;
+                --accent: #ff6b6b;
+                --text: #ecf0f1;
+                --light-bg: #1a1a1a;
+                --border: #444;
+                color-scheme: dark;
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --primary: #3d5a80;
+            --accent: #ff6b6b;
+            --text: #ecf0f1;
+            --light-bg: #1a1a1a;
+            --border: #444;
+            color-scheme: dark;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Merriweather", serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: white;
+            padding: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body { background: var(--light-bg); }
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 8px;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .intro-box {
+            background: var(--light-bg);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .project-card {
+            background: var(--light-bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .methodology {
+            background: #e8f4f8;
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .methodology { background: rgba(60, 90, 128, 0.3); }
+        }
+
+        .code-concept {
+            background: var(--light-bg);
+            font-family: "Roboto", sans-serif;
+            padding: 0.8rem 1.2rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            color: var(--accent);
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .tech-item {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .flow-diagram {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: "Roboto", monospace;
+            font-size: 0.9rem;
+        }
+
+        .step {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            margin: 0.5rem;
+        }
+
+        .arrow {
+            color: var(--accent);
+            font-weight: bold;
+            margin: 0 0.5rem;
+        }
+
+        .warning {
+            background: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+
+        footer {
+            border-top: 2px solid var(--border);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+
+        .learning-path {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .path-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .path-item:last-child {
+            border-bottom: none;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+
+        .beginner { background: var(--success); color: white; }
+        .intermediate { background: var(--warning); color: white; }
+        .advanced { background: var(--accent); color: white; }
+
+        max-width: 900px;
+        margin: 0 auto;
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Finanzas en R</h1>
+        <p class="subtitle">Una guía metodológica para tu aprendizaje</p>
+    </header>
+
+    <div class="intro-box">
+        <p><strong>¿Qué encontrarás en este repositorio?</strong></p>
+        <p>Este es tu espacio de aprendizaje para dominar tres habilidades clave en finanzas cuantitativas:
+        simulaciones de portafolios, análisis de datos reales, y extracción automática de información de documentos PDF.
+        Todo usando R, un lenguaje diseñado precisamente para este tipo de análisis.</p>
+    </div>
+
+    <!-- SECCIÓN 1: ESTRUCTURA GENERAL -->
+    <section>
+        <h2>1. Estructura del Repositorio</h2>
+        <p>Tu repositorio está organizado en tres <strong>núcleos de aprendizaje</strong>, cada uno enfocado en
+        una metodología diferente pero complementaria:</p>
+
+        <div class="project-card">
+            <div class="project-title">📊 project-simulation</div>
+            <p><strong>Tema:</strong> Análisis de Portafolios Financieros</p>
+            <p><strong>Propósito:</strong> Simular retornos de inversiones y evaluar riesgo</p>
+            <p>Aquí aprendes a construir modelos financieros desde cero: cómo generar datos,
+            simular escenarios futuros (Monte Carlo), y calcular métricas de riesgo como volatilidad y
+            Value-at-Risk (VaR).</p>
+        </div>
+
+        <div class="project-card">
+            <div class="project-title">🔍 project-ocr</div>
+            <p><strong>Tema:</strong> Extracción de Datos de Documentos PDF</p>
+            <p><strong>Propósito:</strong> Automatizar la lectura y limpieza de datos</p>
+            <p>Aquí aprendes a usar Optical Character Recognition (OCR) para extraer tablas de PDFs,
+            limpiar datos "sucios" del mundo real, y exportarlos en formatos listos para análisis.</p>
+        </div>
+
+        <div class="project-card">
+            <div class="project-title">🎯 Archivos iniciales</div>
+            <p><strong>Tema:</strong> Fundamentos de R</p>
+            <p><strong>Propósito:</strong> Aprender sintaxis básica y operaciones fundamentales</p>
+            <p>Scripts simples como <code>hello_world_*.R</code> te introducen a la programación en R:
+            variables, funciones, estructuras de control.</p>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: PROJECT SIMULATION -->
+    <section>
+        <h2>2. Project-Simulation: Análisis de Portafolios</h2>
+
+        <div class="methodology">
+            <strong>Metodología Clave:</strong> Simulación de Monte Carlo
+            <p>Genera miles de escenarios de retornos posibles para estimar el riesgo de una cartera de inversiones.</p>
+        </div>
+
+        <h3>¿Qué aprenderás?</h3>
+        <ul>
+            <li><strong>Conceptos Financieros:</strong> Retorno, volatilidad, correlación, diversificación</li>
+            <li><strong>Técnicas Estadísticas:</strong> Simulación de variables aleatorias, distribuciones</li>
+            <li><strong>Visualización:</strong> Cómo representar resultados de forma clara e interpretable</li>
+        </ul>
+
+        <h3>Estructura del Proyecto</h3>
+        <div class="flow-diagram">
+            <div class="step">Datos de Retornos</div>
+            <span class="arrow">→</span>
+            <div class="step">Estadísticas Básicas</div>
+            <span class="arrow">→</span>
+            <div class="step">Simulación MC</div>
+            <span class="arrow">→</span>
+            <div class="step">Cálculo de VaR</div>
+            <span class="arrow">→</span>
+            <div class="step">Visualización</div>
+        </div>
+
+        <h3>Archivos Principales</h3>
+        <div class="code-concept">project-simulation-part01-comentado.R</div>
+        <p>Tu punto de partida. Este archivo:</p>
+        <ul>
+            <li>Carga datos de retornos de acciones reales (CSV)</li>
+            <li>Calcula media, volatilidad y correlaciones</li>
+            <li>Explica cada paso con comentarios educativos</li>
+            <li>Genera gráficos de evolución de portafolios</li>
+        </ul>
+
+        <div class="code-concept">project-simulation-part02-shocks.R</div>
+        <p>Análisis avanzado: ¿Qué pasa si el mercado colapsa?</p>
+        <ul>
+            <li>Implementa escenarios de estrés ("shocks")</li>
+            <li>Simula crisis de mercado y su impacto en tu portafolio</li>
+            <li>Introduces variables macroeconómicas</li>
+        </ul>
+
+        <h3>Resultado Esperado</h3>
+        <p>Al terminar, tendrás:</p>
+        <ul>
+            <li>Simulaciones de 10,000+ escenarios de retornos futuros</li>
+            <li>Distribuciones de pérdidas y ganancias potenciales</li>
+            <li>Valor en Riesgo (VaR) para diferentes niveles de confianza</li>
+            <li>Gráficos profesionales listos para presentar</li>
+        </ul>
+    </section>
+
+    <!-- SECCIÓN 3: PROJECT OCR -->
+    <section>
+        <h2>3. Project-OCR: Extracción y Limpieza de Datos</h2>
+
+        <div class="methodology">
+            <strong>Metodología Clave:</strong> ETL (Extract, Transform, Load)
+            <p>El ciclo completo de preparación de datos: extrae información de fuentes no estructuradas,
+            limpia inconsistencias, y exporta en formato analítico.</p>
+        </div>
+
+        <h3>¿Qué aprenderás?</h3>
+        <ul>
+            <li><strong>Extracción de Texto:</strong> OCR con pdftools y tesseract</li>
+            <li><strong>Manipulación de Strings:</strong> Expresiones regulares y limpieza de caracteres</li>
+            <li><strong>Transformación de Datos:</strong> Conversión de tipos, validación, detección de errores</li>
+            <li><strong>Exportación:</strong> CSV, RDS, y otros formatos</li>
+        </ul>
+
+        <h3>El Flujo de Trabajo (Pipeline)</h3>
+        <div class="flow-diagram">
+            <div class="step">PDF Escaneado</div>
+            <span class="arrow">→</span>
+            <div class="step">OCR</div>
+            <span class="arrow">→</span>
+            <div class="step">Parse Tabla</div>
+            <span class="arrow">→</span>
+            <div class="step">Limpieza</div>
+            <span class="arrow">→</span>
+            <div class="step">Validación</div>
+            <span class="arrow">→</span>
+            <div class="step">Export CSV</div>
+        </div>
+
+        <h3>Progresión de Scripts</h3>
+
+        <div class="learning-path">
+            <div class="path-item">
+                <strong>ocr-pdf-01.R</strong> <span class="difficulty beginner">Básico</span>
+                <p>Extracción simple del PDF de USBP (US Border Patrol). Aquí ves cómo:</p>
+                <ul>
+                    <li>Leer un PDF con <code>pdf_text()</code></li>
+                    <li>Dividir texto en líneas y campos</li>
+                    <li>Separar datos por espacios múltiples</li>
+                    <li>Convertir a data.frame</li>
+                </ul>
+            </div>
+
+            <div class="path-item">
+                <strong>ocr-pdf-02.R</strong> <span class="difficulty intermediate">Intermedio</span>
+                <p>Limpieza y validación completa. Aprendes:</p>
+                <ul>
+                    <li>Eliminar filas vacías y artefactos del PDF</li>
+                    <li>Limpiar nombres (asteriscos, paréntesis)</li>
+                    <li>Clasificar filas (sectores vs. totales)</li>
+                    <li>Convertir columnas a tipos numéricos</li>
+                    <li><strong>Validar integridad:</strong> Verificar que subtotales cuadren</li>
+                </ul>
+            </div>
+
+            <div class="path-item">
+                <strong>ocr-pdf-03.R</strong> <span class="difficulty advanced">Avanzado</span>
+                <p>Análisis y visualización de datos limpios (ejemplo: análisis exploratorio).</p>
+            </div>
+        </div>
+
+        <h3>El Dataset Real: USBP Sector Profile FY2017</h3>
+        <p>Trabajas con datos reales del Patrullaje Fronterizo de EE.UU. La tabla incluye:</p>
+        <ul>
+            <li><strong>20 sectores</strong> fronterizos (Miami, El Paso, San Diego, etc.)</li>
+            <li><strong>4 subtotales regionales</strong> (Coastal, Northern, Southwest, Nationwide)</li>
+            <li><strong>9 métricas</strong>: personal, aprehensiones, drogas decomisadas, etc.</li>
+        </ul>
+
+        <div class="warning">
+            <strong>⚠️ Desafío Real:</strong> El PDF original tiene:
+            <ul>
+                <li>Números con comas ("2,280" → 2280)</li>
+                <li>Valores "N/A" que deben convertirse a NA en R</li>
+                <li>Asteriscos indicando notas al pie</li>
+                <li>Inconsistencias en formato entre páginas</li>
+            </ul>
+            Tu script debe manejar todo esto automáticamente.
+        </div>
+
+        <h3>Resultado Esperado</h3>
+        <p>Después del pipeline completo tendrás:</p>
+        <ul>
+            <li><code>usbp_sector_profile_fy2017.csv</code> - Tabla limpia en formato CSV</li>
+            <li><code>usbp_sector_profile_fy2017.rds</code> - Almacenamiento eficiente para R</li>
+            <li>Validaciones que prueban integridad de datos ✓</li>
+            <li>Documentación de qué cambios se hicieron y por qué</li>
+        </ul>
+    </section>
+
+    <!-- SECCIÓN 4: TECNOLOGÍAS -->
+    <section>
+        <h2>4. Herramientas y Tecnologías</h2>
+
+        <h3>Librerías de R que Usarás</h3>
+        <div class="tech-stack">
+            <div class="tech-item">
+                <strong>dplyr</strong>
+                <p>Manipulación de datos: filtrar, transformar, agrupar.</p>
+            </div>
+            <div class="tech-item">
+                <strong>tidyr</strong>
+                <p>Reorganizar datos en formato "tidy" (limpio).</p>
+            </div>
+            <div class="tech-item">
+                <strong>stringr</strong>
+                <p>Manipulación de strings y expresiones regulares.</p>
+            </div>
+            <div class="tech-item">
+                <strong>ggplot2</strong>
+                <p>Visualización profesional de gráficos.</p>
+            </div>
+            <div class="tech-item">
+                <strong>pdftools</strong>
+                <p>Lectura y manipulación de PDFs.</p>
+            </div>
+            <div class="tech-item">
+                <strong>tesseract</strong>
+                <p>Optical Character Recognition (OCR).</p>
+            </div>
+        </div>
+
+        <h3>Conceptos Clave</h3>
+        <div class="code-concept">Data Pipeline: Entrada → Transformación → Salida</div>
+        <div class="code-concept">Reproducibilidad: Tu script debe ejecutarse idéntico cada vez</div>
+        <div class="code-concept">Validación: Pruebas automáticas que aseguran calidad</div>
+    </section>
+
+    <!-- SECCIÓN 5: CAMINO DE APRENDIZAJE RECOMENDADO -->
+    <section>
+        <h2>5. Tu Camino de Aprendizaje Recomendado</h2>
+
+        <h3>Fase 1: Fundamentos (Semana 1-2)</h3>
+        <div class="learning-path">
+            <div class="path-item">
+                ✓ Lee: <code>hello_world_*.R</code> - Sintaxis básica de R
+            </div>
+            <div class="path-item">
+                ✓ Lee: <code>file_01.R</code> - Trabajar con variables y funciones
+            </div>
+            <div class="path-item">
+                ✓ Practica: Modifica estos scripts para experimentar
+            </div>
+        </div>
+
+        <h3>Fase 2: Extracción de Datos (Semana 3-4)</h3>
+        <div class="learning-path">
+            <div class="path-item">
+                ✓ Ejecuta: <code>ocr-pdf-01.R</code> - Entiende cómo se extrae un PDF
+            </div>
+            <div class="path-item">
+                ✓ Estudia: <code>ocr-pdf-02.R</code> - Aprende técnicas de limpieza
+            </div>
+            <div class="path-item">
+                ✓ Replica: Aplica el mismo flujo a otro PDF (trae un documento tuyo)
+            </div>
+        </div>
+
+        <h3>Fase 3: Análisis Financiero (Semana 5-8)</h3>
+        <div class="learning-path">
+            <div class="path-item">
+                ✓ Ejecuta: <code>project-simulation-part01-comentado.R</code>
+            </div>
+            <div class="path-item">
+                ✓ Interpreta: ¿Qué significa cada gráfico? ¿Qué nos dice sobre el riesgo?
+            </div>
+            <div class="path-item">
+                ✓ Experimenta: Cambia los parámetros, crea nuevas carteras
+            </div>
+            <div class="path-item">
+                ✓ Avanza: <code>project-simulation-part02-shocks.R</code>
+            </div>
+        </div>
+
+        <h3>Fase 4: Proyecto Integrador (Semana 9-12)</h3>
+        <div class="learning-path">
+            <div class="path-item">
+                ✓ Combina ambas metodologías: Extrae datos reales → Analiza con simulaciones
+            </div>
+            <div class="path-item">
+                ✓ Proyecto sugerido: Extrae datos de un PDF financiero, luego simula retornos
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 6: PREGUNTAS GUÍA -->
+    <section>
+        <h2>6. Preguntas Guía Mientras Aprendes</h2>
+
+        <h3>Para project-simulation:</h3>
+        <ul>
+            <li>¿Qué es volatilidad? ¿Cómo la calculamos?</li>
+            <li>¿Por qué simulamos 10,000 escenarios y no solo uno?</li>
+            <li>¿Qué significa "correlación negativa"? ¿Por qué importa para diversificar?</li>
+            <li>¿Cómo interpretamos un gráfico de distribuciones de retornos?</li>
+            <li>¿Qué es Value-at-Risk (VaR) al 95%? ¿Qué nos dice?</li>
+        </ul>
+
+        <h3>Para project-ocr:</h3>
+        <ul>
+            <li>¿Qué es OCR y cuáles son sus limitaciones?</li>
+            <li>¿Por qué algunas columnas quedan como texto si contienen números?</li>
+            <li>¿Cómo detectamos filas mal formateadas o faltantes?</li>
+            <li>¿Qué significa "validación de datos"? ¿Cómo la implementamos?</li>
+            <li>¿Cómo documentamos qué transformaciones aplicamos?</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>💡 <strong>Recuerda:</strong> El verdadero aprendizaje ocurre cuando experimentas, cometes errores,
+        y corriges. No solo leas los scripts—ejecútalos, modifícalos, y crea los tuyos propios.</p>
+        <p>Este repositorio es tu sandbox de aprendizaje. ¡Úsalo sin miedo!</p>
+    </footer>
+</body>
+</html>
