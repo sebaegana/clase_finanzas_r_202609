@@ -1,7 +1,11 @@
+#install.packages("pdftools")
+#install.packages("stringr")
+
 library(pdftools)
+library(stringr)
 # Using poppler version 22.04.0
 
-border_patrol <- pdf_text("usbp_stats_fy2017_sector_profile.pdf")
+border_patrol <- pdf_text("usbpstatsfy2017sectorprofile.pdf")
 
 head(border_patrol)
 
@@ -17,6 +21,8 @@ sector_profile <- sector_profile[[1]]
 
 head(sector_profile)
 
+sector_profile
+
 sector_profile <- trimws(sector_profile)
 
 sector_profile
@@ -30,7 +36,7 @@ sector_profile <- sector_profile[grep("Miami", sector_profile):
 
 head(sector_profile)
 
-library(stringr)
+sector_profile
 
 sector_profile <- str_split_fixed(sector_profile, " {2,}", 10)
 
