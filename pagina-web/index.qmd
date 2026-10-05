@@ -1,0 +1,36 @@
+---
+title: "Mi página en R"
+format: html
+---
+
+# Bienvenido a mi página
+
+## Sobre mí
+
+Mi nombre es **Sebastian Egana**. Soy analista financiero y estudiante apasionado de ciencia de datos, con especialización en análisis cuantitativo y modelado financiero utilizando **R**.
+
+### Formación y Experiencia
+
+Me dedico al estudio y análisis profundo de las finanzas cuantitativas, con particular énfasis en:
+
+- **Análisis de portafolios** y gestión de riesgos
+- **Modelado financiero** avanzado
+- **Procesamiento y limpieza de datos** financieros
+- **Stress testing** y análisis de escenarios
+- **Automatización** de procesos con R
+
+### Mis Intereses
+
+- Econometría aplicada
+- Análisis técnico y fundamental de mercados
+- Optimización de portafolios
+- Machine Learning en finanzas
+- Visualización de datos financieros
+
+### Objetivo
+
+Esta página documenta mi trabajo en análisis financiero y desarrollo de herramientas analíticas. Aquí compartiré proyectos, investigaciones y recursos educativos relacionados con finanzas cuantitativas en R.
+
+---
+
+**Contacto:** sebaegana@gmail.com
